@@ -24,7 +24,6 @@ const Spotify = {
             token = window.location.href.match(/access_token=([^&]*)/)[1];
             expirationTime = window.location.href.match(/expires_in=([^&]*)/)[1];
             window.setTimeout(() => token = '', expirationTime * 1000);
-            window.history.pushState('Access Token', null, '/');
             return true;
         }else return false;
     },
@@ -78,7 +77,7 @@ const Spotify = {
         const jsonResponsePost = await responsePost.json();
         playlistID = jsonResponsePost.id;
 
-        const responseAddTracks = await fetch('https://api.spotify.com/v1/playlists/' + playlistID + '/tracks', {
+        await fetch('https://api.spotify.com/v1/playlists/' + playlistID + '/tracks', {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${token}`
@@ -87,7 +86,6 @@ const Spotify = {
                 uris: tracks
             })
         });
-        const jsonResponseAddTracks = await responseAddTracks.json();
     }
 };
 

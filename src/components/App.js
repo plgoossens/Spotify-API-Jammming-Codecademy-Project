@@ -11,14 +11,26 @@ class App extends React.Component {
     this.state = {
       searchResults : [],
       playlistName: "New playlist",
-      playlistTracks: []
+      playlistTracks: [],
+      query: ""
     };
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
     this.search = this.search.bind(this);
+    this.checkURLParams();
+  }
+
+  checkURLParams(){
     Spotify.checkToken();
+    if(window.location.href.match(/state=([^&]*)/)!==null){
+      const query = window.location.href.match(/state=([^&]*)/)[1];
+      this.setState({
+        query: query
+      });
+    }
+    //window.history.pushState('Access Token', null, '/');
   }
 
   addTrack(track){
@@ -52,7 +64,6 @@ class App extends React.Component {
   }
 
   async savePlaylist(){
-    const trackURIs = this.state.playlistTracks.map(e => e.uri);
     await Spotify.savePlaylist(this.state.playlistName, this.getURIarray());
     this.setState({
       playlistName: "New playlist",
@@ -71,7 +82,7 @@ class App extends React.Component {
       <div>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
         <div className="App">
-          <SearchBar onSearch={this.search}/>
+          <SearchBar onSearch={this.search} query={this.state.query}/>
           <div className="App-playlist">
             <SearchResults results={this.state.searchResults} onAdd={this.addTrack}/>
             <Playlist name={this.state.playlistName} tracks={this.state.playlistTracks} onRemove={this.removeTrack} onNameChange={this.updatePlaylistName} onSave={this.savePlaylist}/>
