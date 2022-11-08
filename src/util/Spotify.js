@@ -6,7 +6,7 @@ const Spotify = {
         if(token !== ""){
             return token;
         }else if(!this.checkToken()){
-            var client_id = '10eb5a52e46940b899591c094ba28192';
+            var client_id = ''; // INSERT CLIENT ID HERE
             var redirect_uri = 'http://localhost:3000/callback';
             var scope = 'playlist-modify-public';
 
